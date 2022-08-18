@@ -8,7 +8,14 @@
 
 <body>
 
-<p>Welcom to lib</p>
+<p>Users:  </p>
+<div th:each = "person : ${people}">
+    <a th:href="@{/people/{id}(id=${person.getId()})}" th:text="${person.getName()}">name</a>
+</div>
+
+<br>
+<a th:href="@{/people/new}">create new users</a>
+
 
 
 

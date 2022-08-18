@@ -35,7 +35,19 @@
 --    name varchar not null,
 --    
 --);
-select * from person;]]></console>
+select * from people;
+
+
+create table people(
+    id serial primary key ,
+    name varchar not null unique,
+    yearBorn int
+);
+insert into people (name, yearBorn) values ('Anton', 1991);
+insert into people (name, yearBorn) values ('Ivan', 1992);
+insert into people (name, yearBorn) values ('Alexei', 1992);
+insert into people (name, yearBorn) values ('Pavel', 1992);
+insert into people (name, yearBorn) values ('Pasha', 1993);]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
@@ -75,7 +87,7 @@ select * from person;]]></console>
     <connections>
       <connection id="5dcfe74e-4891-45d5-9dea-e483774d3d3b" active="true" signed="true">
         <database>
-          <name value="libraryDB" />
+          <name value="library" />
           <description value="" />
           <database-type value="POSTGRES" />
           <config-type value="BASIC" />

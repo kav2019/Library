@@ -1,10 +1,12 @@
 package library_project.models;
 
 public class People {
+    private int id;
     private String name;
     private int yearBorn;
 
-    public People(String name, int yearBorn) {
+    public People(int id, String name, int yearBorn) {
+        this.id = id;
         this.name = name;
         this.yearBorn = yearBorn;
     }
@@ -26,5 +28,9 @@ public class People {
 
     public void setYearBorn(int yearBorn) {
         this.yearBorn = yearBorn;
+    }
+
+    public int getId() {
+        return id;
     }
 }
