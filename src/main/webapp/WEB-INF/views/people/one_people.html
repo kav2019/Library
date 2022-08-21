@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${people.getName()}">One people</title>
+</head>
+<body>
+<p>User:</p>
+<p th:text="'Name: '+${people.getName()}" >Name</p>
+<p th:text="'Year of bithday: '+${people.getYearBorn()}" >Born</p>
+
+</body>
+<br>
+<a th:href="@{/library/{id}/edit(id=${people.getId()})}" th:text="'edit ' + ${people.getName()} ">edit user</a>
+<br>
+<!--<a th:href="@{/library}" th:text="all users">all users age</a>-->
+<a href="/library">all users</a>
+</html>

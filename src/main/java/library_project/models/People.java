@@ -30,6 +30,10 @@ public class People {
         this.yearBorn = yearBorn;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public int getId() {
         return id;
     }

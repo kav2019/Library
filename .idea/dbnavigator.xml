@@ -47,7 +47,9 @@ insert into people (name, yearBorn) values ('Anton', 1991);
 insert into people (name, yearBorn) values ('Ivan', 1992);
 insert into people (name, yearBorn) values ('Alexei', 1992);
 insert into people (name, yearBorn) values ('Pavel', 1992);
-insert into people (name, yearBorn) values ('Pasha', 1993);]]></console>
+insert into people (name, yearBorn) values ('Pasha', 1993);
+
+--update people set name='AAnton',  yearBorn=1900 where id=?]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
