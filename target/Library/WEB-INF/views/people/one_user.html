@@ -9,6 +9,11 @@
 <p th:text="'Name: '+${people.getName()}" >Name</p>
 <p th:text="'Year of bithday: '+${people.getYearBorn()}" >Born</p>
 
+<p>Books to read</p>
+<div th:each = "book : ${books}">
+    <a th:href="@{/book/{id}(id=${book.getId()})}" th:text="${book.getName()}">name</a>
+</div>
+
 </body>
 <br>
 <a th:href="@{/library/{id}/edit(id=${people.getId()})}" th:text="'edit ' + ${people.getName()} ">edit user</a>

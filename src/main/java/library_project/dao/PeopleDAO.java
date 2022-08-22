@@ -1,5 +1,6 @@
 package library_project.dao;
 
+import library_project.models.Book;
 import library_project.models.People;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,29 +17,45 @@ public class PeopleDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<People> returnAllPeople(){ //----метод возвращающий ВСЕХ пользователей
+
+    //метод возвращающий ВСЕХ пользователей
+    public List<People> returnAllPeople(){
         String sql = "select * from people";
         return jdbcTemplate.query(sql,new PeopleMapper());
     }
 
-    public People returnOnePeople(int id){ //---метод возвращающий ОДНОГО пользователя по id
+    //метод возвращающий ОДНОГО пользователя по id
+    public People returnOnePeople(int id){
         String sql = "select * from people where id=?";
         return jdbcTemplate.query(sql, new PeopleMapper(), id).stream().findAny().orElse(null);
     }
 
-    public void saveChangePeople(People people,int id){ //метод сохраяющий изменения ОДНОГО пользователей
+    //метод сохраяющий изменения ОДНОГО пользователей
+    public void saveChangePeople(People people,int id){
         String sql = "update people set name=?, yearBorn=? where id=?";
         jdbcTemplate.update(sql, people.getName(), people.getYearBorn(),id);
     }
 
-    public void savePeople(People people){     //метод сохраяющий ОДНОГО пользователей
+    //метод добавляющий ОДНОГО пользователей
+    public void savePeople(People people){
         String sql = "insert into people (name, yearBorn) values (?, ?)";
         jdbcTemplate.update(sql, people.getName(), people.getYearBorn());
     }
 
-    public void delPeople(int id){ //метод удаляющий ОДНОГО пользователей
+    //метод удаляющий ОДНОГО пользователей
+    public void delPeople(int id){
         String sql = "delete from people where id=?";
         jdbcTemplate.update(sql, id);
+    }
+
+    // //Метод получающий список книг у пользователя
+    public List<Book> bookListUsing(int id){
+        String sql = "select book.id, book.name, book.author, book.year from people " +
+                "join user_book on people.id = user_book.user_id " +
+                "join book on user_book.book_id = book.id " +
+                "where people.id =?";
+        return jdbcTemplate.query(sql, new BookMapper(), id);
+
     }
 
 

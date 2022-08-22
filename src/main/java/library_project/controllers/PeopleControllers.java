@@ -4,18 +4,17 @@ package library_project.controllers;
 import library_project.dao.PeopleDAO;
 import library_project.models.People;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/library")
-public class LibControllers {
+public class PeopleControllers {
     private final PeopleDAO peopleDAO;
 
     @Autowired
-    public LibControllers(PeopleDAO peopleDAO) {
+    public PeopleControllers(PeopleDAO peopleDAO) {
         this.peopleDAO = peopleDAO;
     }
 
@@ -28,7 +27,8 @@ public class LibControllers {
     @GetMapping("/{id}") //показать одного пользователя
     public String getOnePeople(@PathVariable("id") int id, Model model){
         model.addAttribute("people", peopleDAO.returnOnePeople(id));
-        return "people/one_people";
+        model.addAttribute("books", peopleDAO.bookListUsing(id));
+        return "people/one_user";
     }
 
     @GetMapping("/{id}/edit")  //показать страницу с полями для изменения юзера
@@ -40,6 +40,17 @@ public class LibControllers {
     @PatchMapping("{id}") //сохранение измененного пользователя с редиректом
     public String saveEdit(@PathVariable("id") int id,  @ModelAttribute("people") People people){
         peopleDAO.saveChangePeople(people, id);
+        return "redirect:/library";
+    }
+
+    @GetMapping("/new_people") //страницу создания пользователя
+    public String addUsers(@ModelAttribute("people") People people){
+        return "people/add_user";
+    }
+
+    @PatchMapping("/new_people")
+    public String saveAddUser(@ModelAttribute("people") People people){ //сохраняем ового пользователя и редирект на главную страницу
+        peopleDAO.savePeople(people);
         return "redirect:/library";
     }
 }
