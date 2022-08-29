@@ -53,4 +53,16 @@ public class PeopleControllers {
         peopleDAO.savePeople(people);
         return "redirect:/library";
     }
+
+    @GetMapping("/{id}/del") //даляем человека
+    public String delUser(@PathVariable("id") int id){
+        peopleDAO.delPeople(id);
+        return "redirect:/library";
+    }
+
+    @GetMapping("/{idP}/del_book/{idB}")
+    public String delBook(@PathVariable("idB") int idBook, @PathVariable("idP")int idPeople){ //удаляем книгу из списка
+        peopleDAO.delBookOfList(idPeople, idBook);
+        return "redirect:/library/"+idPeople;
+    }
 }

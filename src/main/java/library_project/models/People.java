@@ -37,4 +37,19 @@ public class People {
     public int getId() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        return "name: " + name;
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this.hashCode()==obj.hashCode();
+    }
 }

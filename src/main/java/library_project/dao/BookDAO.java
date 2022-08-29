@@ -1,6 +1,7 @@
 package library_project.dao;
 
 import library_project.models.Book;
+import library_project.models.People;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -48,6 +49,25 @@ public class BookDAO {
         String sql = "delete from book where id=?";
         jdbcTemplate.update(sql, id);
     }
+
+    //метод показывающий у книги читателей
+    public List<People> getReadBook(int id){
+        String sql = "select people.id, people.name, people.yearBorn from people " +
+                "join user_book " +
+                "on people.id = user_book.user_id " +
+                "join book " +
+                "on user_book.book_id = book.id " +
+                "where book_id = ?";
+        return jdbcTemplate.query(sql, new PeopleMapper(), id);
+    }
+
+    //добавляет книгу к пользователю
+    public void setReadPeople(int idUsers, int idBook){
+        String sql = "insert into user_book (user_id, book_id) values (?, ?)";
+        jdbcTemplate.update(sql, idUsers, idBook);
+    }
+
+
 
 
 

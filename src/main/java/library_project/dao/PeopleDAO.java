@@ -58,6 +58,12 @@ public class PeopleDAO {
 
     }
 
+    //Удаление из связывающей таблицы, удаление книги у человека
+    public void delBookOfList(int idPeople, int idBook){
+        String sql = "delete from user_book where user_id=? and book_id = ?";
+        jdbcTemplate.update(sql, idPeople, idBook);
+    }
+
 
 
 

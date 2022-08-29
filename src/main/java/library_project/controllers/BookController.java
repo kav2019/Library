@@ -2,20 +2,26 @@ package library_project.controllers;
 
 
 import library_project.dao.BookDAO;
+import library_project.dao.PeopleDAO;
 import library_project.models.Book;
+import library_project.models.People;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/book")
 public class BookController {
     private final BookDAO bookDAO;
+    private final PeopleDAO peopleDAO;
 
     @Autowired
-    public BookController(BookDAO bookDAO) {
+    public BookController(BookDAO bookDAO, PeopleDAO peopleDAO) {
         this.bookDAO = bookDAO;
+        this.peopleDAO = peopleDAO;
     }
 
     @GetMapping()
@@ -24,9 +30,15 @@ public class BookController {
         return "book/all_books";
     }
 
-    @GetMapping("/{id}") //показать одного пользователя
-    public String getOneBook(Model model, @PathVariable("id") int id){
+    @GetMapping("/{id}") //показать одн книгу со списком читателей и назначением новх
+    public String getOneBook(Model model, @PathVariable("id") int id, @ModelAttribute("person") People people){
         model.addAttribute("book", bookDAO.returnOneBook(id));
+        List<People> reader = bookDAO.getReadBook(id);//все читающие у данной книги
+        List<People> peopleForSetRead = peopleDAO.returnAllPeople(); //все люди
+        peopleForSetRead.removeAll(reader); //все кто еще не читает эту книгу
+//        peopleForSetRead.stream().forEach(x -> System.out.println(x));
+        model.addAttribute("people", peopleForSetRead); //люди в выпадающем списке которых можно назначить читающим
+        model.addAttribute("reader", reader); //список людей которые читают данную книгу
         return "book/one_book";
 
     }
@@ -54,11 +66,20 @@ public class BookController {
         return "redirect:/book";
     }
 
-    @GetMapping("/{id}/del")
+    @GetMapping("/{id}/del") //удаляет пользователя
     public String delBook(@PathVariable("id") int id){
         bookDAO.delBook(id);
         return "redirect:/book";
     }
+
+    @PostMapping("/{id}/set_reader") //добаляет к книге читающего
+    public String setReader(@PathVariable("id") int idBook, @ModelAttribute("people")People people){
+        bookDAO.setReadPeople(people.getId(), idBook);
+        String html = "redirect:/book/" + idBook;
+        return html;
+    }
+
+
 
 
 }
