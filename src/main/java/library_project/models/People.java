@@ -1,12 +1,33 @@
 package library_project.models;
 
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
 public class People {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "yearborn")
     private int yearBorn;
 
-    public People(int id, String name, int yearBorn) {
-        this.id = id;
+    @ManyToMany
+    @JoinTable(
+            name = "user_book",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id")
+    )
+    private List<Book> books;
+
+
+
+
+    public People(String name, int yearBorn) {
         this.name = name;
         this.yearBorn = yearBorn;
     }
@@ -52,4 +73,13 @@ public class People {
     public boolean equals(Object obj) {
         return this.hashCode()==obj.hashCode();
     }
+
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<Book> books) {
+        this.books = books;
+    }
+
 }

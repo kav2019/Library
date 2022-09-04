@@ -1,16 +1,38 @@
 package library_project.models;
 
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
 public class Book {
-    private String name;
-    private String author;
-    private int year;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
 
-    public Book(String name, String author, int year, int id) {
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "author")
+    private String author;
+
+    @Column(name = "year")
+    private int year;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_book",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<People> peoples;
+
+
+
+    public Book(String name, String author, int year) {
         this.name = name;
         this.author = author;
         this.year = year;
-        this.id = id;
     }
 
     public Book() {
@@ -46,5 +68,13 @@ public class Book {
 
     public void setYear(int year) {
         this.year = year;
+    }
+
+    public List<People> getPeoples() {
+        return peoples;
+    }
+
+    public void setPeoples(List<People> peoples) {
+        this.peoples = peoples;
     }
 }
