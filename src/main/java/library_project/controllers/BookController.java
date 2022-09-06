@@ -35,6 +35,8 @@ public class BookController {
         model.addAttribute("book", bookDAO.returnOneBook(id));
         List<People> reader = bookDAO.getReadBook(id);//все читающие у данной книги
         List<People> peopleForSetRead = peopleDAO.returnAllPeople(); //все люди
+//        System.out.println("read" + reader+"\n");
+//        System.out.println("peo " + peopleForSetRead+"\n");
         peopleForSetRead.removeAll(reader); //все кто еще не читает эту книгу
 //        peopleForSetRead.stream().forEach(x -> System.out.println(x));
         model.addAttribute("people", peopleForSetRead); //люди в выпадающем списке которых можно назначить читающим

@@ -2,6 +2,7 @@ package library_project.dao;
 
 import library_project.models.Book;
 import library_project.models.People;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class BookDAO {
 //        return jdbcTemplate.query(sql, new BookMapper());
 
         Session session = sessionFactory.getCurrentSession();
-        return  session.createQuery("select b from Book b", Book.class).getResultList();
+        return  session.createQuery("select b from Book as b", Book.class).getResultList();
     }
 
 
@@ -46,7 +47,9 @@ public class BookDAO {
 //        return jdbcTemplate.query(sql, new BookMapper(), id).stream().findAny().orElse(null);
 
         Session session = sessionFactory.getCurrentSession();
-        return session.get(Book.class, id);
+        Book book = session.get(Book.class, id);
+//        System.out.println(book);
+        return book;
     }
 
     //метод добавляющий книгу
@@ -57,7 +60,9 @@ public class BookDAO {
 
         Session session = sessionFactory.getCurrentSession();
         Book bookForDB = new Book(book.getName(), book.getAuthor(), book.getYear());
+        //session.save(book) так тоже можно
         session.save(bookForDB);
+
     }
 
 
@@ -98,7 +103,9 @@ public class BookDAO {
 //        return jdbcTemplate.query(sql, new PeopleMapper(), id);
         Session session = sessionFactory.getCurrentSession();
         Book book = session.get(Book.class, id);
-        return book.getPeoples();
+        List<People> peopleList = book.getPeoples();
+        Hibernate.initialize(peopleList);
+        return peopleList;
 
     }
 
@@ -112,7 +119,6 @@ public class BookDAO {
         Book book = session.get(Book.class, idBook);
         People people = session.get(People.class, idUsers);
 
-        book.getPeoples().add(people);
         people.getBooks().add(book);
     }
 

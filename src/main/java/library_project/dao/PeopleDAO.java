@@ -2,6 +2,7 @@ package library_project.dao;
 
 import library_project.models.Book;
 import library_project.models.People;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,7 +91,9 @@ public class PeopleDAO {
 
         Session session = sessionFactory.getCurrentSession();
         People people = session.get(People.class, id);
-        return people.getBooks();
+        List<Book> books;
+        Hibernate.initialize(books = people.getBooks()); //что бы сразу подгрузились
+        return books;
 
     }
 
