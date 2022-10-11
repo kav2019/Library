@@ -6,6 +6,8 @@ import library_project.models.People;
 import library_project.service.BookService;
 import library_project.service.PeopleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -34,10 +36,20 @@ public class BookController {
     }
 
 
+//    @GetMapping()
+//    public String allBook(Model model){ //показать все книги
+////        model.addAttribute("book", bookDAO.returnAllBook());
+//        model.addAttribute("book", bookService.returnAllBook());
+//        return "book/all_books";
+//    }
+
+//   показать все книги по страницам
     @GetMapping()
-    public String allBook(Model model){ //показать всех пользователей
-//        model.addAttribute("book", bookDAO.returnAllBook());
-        model.addAttribute("book", bookService.returnAllBook());
+    public String allBook(Model model,
+                          @RequestParam(value = "page", required = false, defaultValue = "0") int page,
+                          @RequestParam(value = "books_per_page", required = false, defaultValue = "10") int booksPerPage){
+
+        model.addAttribute("book", bookService.returnBookOnPage(page, booksPerPage));
         return "book/all_books";
     }
 
@@ -101,6 +113,13 @@ public class BookController {
         bookService.setReadPeople(people.getId(), idBook);
         String html = "redirect:/book/" + idBook;
         return html;
+    }
+
+    @GetMapping("/search")
+    public String search(Model model,
+                         @RequestParam(value = "search_book", required = false) String searchBook){
+        model.addAttribute("book", bookService.search(searchBook));
+        return "book/search";
     }
 
 

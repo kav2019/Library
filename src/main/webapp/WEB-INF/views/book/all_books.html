@@ -8,7 +8,18 @@
 
 <body>
 
-<p>Users:  </p>
+<a th:href="@{/book?page=0&books_per_page=3}">per 3 book</a>
+<a th:href="@{/book?page=0&books_per_page=5}">per 5 book</a>
+<a th:href="@{/book?page=0&books_per_page=10}">per 10 book</a>
+<br>
+<form action="/book/search">
+    <input name="search_book">
+    <button type="submit">Search</button>
+</form>
+<br>
+
+
+<p>Book:  </p>
 <div th:each = "books : ${book}">
     <a th:href="@{/book/{id}(id=${books.getId()})}" th:text="${books.getName()}">name</a>
 </div>

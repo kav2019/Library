@@ -28,7 +28,7 @@ public class PeopleService {
 
     //метод возвращающий ОДНОГО пользователя по id
     public People returnOnePeople(int id){
-        return peopleRepository.findById(id).get();
+        return peopleRepository.findById(id).orElse(null);
     }
 
     //метод сохраяющий изменения ОДНОГО пользователей
@@ -52,8 +52,11 @@ public class PeopleService {
 
     //Метод получающий список книг у пользователя
     public List<Book> bookListUsing(int id){
-        People people = peopleRepository.findById(id).get();
+        People people = peopleRepository.findById(id).orElse(null);
         List<Book> books;
+        if (people == null) {
+            return null;
+        }
         Hibernate.initialize(books = people.getBooks()); //что бы сразу подгрузились
         return books;
     }

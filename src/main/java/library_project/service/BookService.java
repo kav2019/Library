@@ -6,9 +6,15 @@ import library_project.repository.BookRpository;
 import library_project.repository.PeopleRepository;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Service
@@ -16,16 +22,23 @@ import java.util.List;
 public class BookService {
     private final BookRpository bookRpository;
     private final PeopleService peopleService;
+    @PersistenceContext
+    private final EntityManager entityManager;
 
     @Autowired
-    public BookService(BookRpository bookRpository, PeopleRepository peopleRepository, PeopleService peopleService) {
+    public BookService(BookRpository bookRpository, PeopleRepository peopleRepository, PeopleService peopleService, EntityManager entityManager) {
         this.bookRpository = bookRpository;
         this.peopleService = peopleService;
+        this.entityManager = entityManager;
     }
 
     //метод возвращающий все книги
     public List<Book> returnAllBook(){
         return bookRpository.findAll();
+    }
+
+    public Page<Book> returnBookOnPage(int page, int booksPerPage){
+        return bookRpository.findAll(PageRequest.of(page, booksPerPage, Sort.by("year")));
     }
 
     //метод возвращающий одну книгу
@@ -66,5 +79,12 @@ public class BookService {
         Book book = bookRpository.findById(idBook).get();
         People people = peopleService.returnOnePeople(idUsers);
         people.getBooks().add(book);
+    }
+
+    public List<Book> search(String name){
+        String sql = "select b from Book as b where UPPER(b.name) LIKE UPPER('%" +name+"%')";
+        return entityManager.createQuery(sql).getResultList();
+//        return bookRpository.findByNameContaining(name);
+
     }
 }
