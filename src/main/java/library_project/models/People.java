@@ -26,8 +26,6 @@ public class People {
     private List<Book> books;
 
 
-
-
     public People(String name, int yearBorn) {
         this.name = name;
         this.yearBorn = yearBorn;
