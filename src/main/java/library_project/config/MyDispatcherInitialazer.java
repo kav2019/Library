@@ -1,5 +1,6 @@
 package library_project.config;
 
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
@@ -9,12 +10,14 @@ import javax.servlet.ServletException;
 public class MyDispatcherInitialazer extends AbstractAnnotationConfigDispatcherServletInitializer {
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return null;
+//        return null;
+        return new Class[]{SpringConfig.class};
     }
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
         return new Class[]{SpringConfig.class};
+//        return null;
     }
 
     @Override
